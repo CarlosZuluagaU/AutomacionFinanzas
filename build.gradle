@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-reports:4.1.0"
+    }
+}
+
+plugins {
+    id 'io.github.jumosqu12.screenplayarchitecture' version '2.0.1'
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+}
+
+group 'co.edu.udea.fabrica'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+ext {
+    serenityVersion        = '4.1.0'
+    serenityCucumberVersion = '4.1.0'
+    serenityWebVersion     = '4.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "net.serenity-bdd:serenity-core:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-junit:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-cucumber:$serenityCucumberVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:$serenityWebVersion"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "io.github.bonigarcia:webdrivermanager:5.4.1"
+}
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+apply plugin: 'net.serenity-bdd.aggregator'
