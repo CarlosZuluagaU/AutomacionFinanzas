@@ -17,8 +17,8 @@ public class RegisterPage {
             Target.the("campo confirmar password").locatedBy("#confirmPassword");
 
     public static final Target REGISTER_BUTTON =
-            Target.the("boton crear cuenta").locatedBy("button[type='submit']");
+            Target.the("boton crear cuenta").locatedBy("//button[@type='submit']");
 
     public static final Target LOGIN_LINK =
-            Target.the("enlace iniciar sesion").locatedBy("a[href='/']");
+            Target.the("enlace iniciar sesion").locatedBy("//a[@href='/']");
 }

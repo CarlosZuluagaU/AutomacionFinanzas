@@ -33,6 +33,10 @@ public class CreateTransaction implements Task {
                 Enter.theValue(transaction.getFecha()).into(TransactionPage.FECHA_INPUT)
         );
 
+        // Seleccionar la primera categoria disponible en el Radix Select
+        actor.attemptsTo(Click.on(TransactionPage.CATEGORIA_TRIGGER));
+        actor.attemptsTo(Click.on(TransactionPage.PRIMERA_CATEGORIA));
+
         if (transaction.getDescripcion() != null && !transaction.getDescripcion().isEmpty()) {
             actor.attemptsTo(
                     Enter.theValue(transaction.getDescripcion()).into(TransactionPage.DESCRIPCION_INPUT)

@@ -3,8 +3,6 @@ package co.edu.udea.fabrica.finanzas.tasks;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Open;
-import net.thucydides.core.util.EnvironmentVariables;
-import net.thucydides.core.util.SystemEnvironmentVariables;
 
 public class NavigateTo implements Task {
 
@@ -31,16 +29,15 @@ public class NavigateTo implements Task {
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        EnvironmentVariables env = SystemEnvironmentVariables.createEnvironmentVariables();
-        String baseUrl = env.getProperty("pages.baseUrl", "http://localhost:3000");
+        String baseUrl = System.getProperty("pages.baseUrl", "http://localhost:3000");
 
         String url = switch (page) {
-            case LOGIN      -> baseUrl + "/";
-            case DASHBOARD  -> baseUrl + "/dashboard";
+            case LOGIN       -> baseUrl + "/";
+            case DASHBOARD   -> baseUrl + "/dashboard";
             case TRANSACCION -> baseUrl + "/dashboard/transaccion";
-            case HISTORIAL  -> baseUrl + "/dashboard/historial";
-            case METAS      -> baseUrl + "/dashboard/metas";
-            case REPORTE    -> baseUrl + "/dashboard/reporte";
+            case HISTORIAL   -> baseUrl + "/dashboard/historial";
+            case METAS       -> baseUrl + "/dashboard/metas";
+            case REPORTE     -> baseUrl + "/dashboard/reporte";
         };
 
         actor.attemptsTo(Open.url(url));

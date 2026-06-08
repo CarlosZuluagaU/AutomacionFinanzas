@@ -11,11 +11,11 @@ public class LoginPage {
             Target.the("campo password").locatedBy("#password");
 
     public static final Target LOGIN_BUTTON =
-            Target.the("boton iniciar sesion").locatedBy("button[type='submit']");
+            Target.the("boton iniciar sesion").locatedBy("//button[@type='submit']");
 
     public static final Target REGISTER_LINK =
-            Target.the("enlace registrarse").locatedBy("a[href='/register']");
+            Target.the("enlace registrarse").locatedBy("//a[@href='/register']");
 
     public static final Target ERROR_MESSAGE =
-            Target.the("mensaje de error").locatedBy("[role='alert'], .error-message, p.text-red-500");
+            Target.the("mensaje de error").locatedBy("//*[contains(@class,'text-destructive') or contains(@class,'text-red')]");
 }

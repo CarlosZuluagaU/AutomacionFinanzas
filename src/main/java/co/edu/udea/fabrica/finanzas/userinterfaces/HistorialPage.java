@@ -26,8 +26,8 @@ public class HistorialPage {
             Target.the("estado vacio").locatedBy("//p[contains(text(),'No hay transacciones')]");
 
     public static final Target SEARCH_INPUT =
-            Target.the("buscador").locatedBy("input[placeholder*='uscar'], input[type='search']");
+            Target.the("buscador").locatedBy("//input[contains(@placeholder,'uscar') or @type='search']");
 
     public static final Target FILTER_TYPE =
-            Target.the("filtro tipo").locatedBy("select[name='tipo'], select#tipo");
+            Target.the("filtro tipo").locatedBy("//select[@name='tipo' or @id='tipo']");
 }

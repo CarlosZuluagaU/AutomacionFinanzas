@@ -2,9 +2,10 @@ package co.edu.udea.fabrica.finanzas.questions;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
-import net.serenitybdd.screenplay.actions.Open;
-import net.serenitybdd.screenplay.waits.WaitUntil;
-import net.thucydides.core.webdriver.ThucydidesWebDriverSupport;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class IsLoggedIn implements Question<Boolean> {
 
@@ -16,7 +17,13 @@ public class IsLoggedIn implements Question<Boolean> {
 
     @Override
     public Boolean answeredBy(Actor actor) {
-        String url = ThucydidesWebDriverSupport.getDriver().getCurrentUrl();
-        return url != null && url.contains("/dashboard");
+        WebDriver driver = BrowseTheWeb.as(actor).getDriver();
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(d -> d.getCurrentUrl() != null && d.getCurrentUrl().contains("/dashboard"));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
