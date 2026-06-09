@@ -1,3 +1,10 @@
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-reports:4.1.0"
+    }
+}
+
 plugins {
     id 'io.github.jumosqu12.screenplayarchitecture' version '2.0.1'
     id 'java'
@@ -33,7 +40,20 @@ dependencies {
     testImplementation "io.github.bonigarcia:webdrivermanager:5.4.1"
 }
 
-test {
-    testLogging.showStandardStreams = true
+task aggregate {
+    group 'Serenity'
+    description 'Generates Serenity HTML report from test results'
+    doLast {
+        def reportsDir = file("${project.projectDir}/target/site/serenity")
+        def reporter = new net.thucydides.core.reports.html.HtmlAggregateStoryReporter('automacion-finanzas')
+        reporter.sourceDirectory = reportsDir
+        reporter.outputDirectory = reportsDir
+        reporter.generateReportsForTestResultsFrom(reportsDir)
+        println "Serenity report generated at: ${reportsDir}/index.html"
+    }
 }
 
+test {
+    testLogging.showStandardStreams = true
+    finalizedBy aggregate
+}

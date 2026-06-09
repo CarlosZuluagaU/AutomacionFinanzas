@@ -6,11 +6,15 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class NavigateTo implements Task {
 
     public enum Page {
-        LOGIN, DASHBOARD, TRANSACCION, HISTORIAL, METAS, REPORTE
+        LOGIN, DASHBOARD, TRANSACCION, HISTORIAL, METAS, REPORTE, PRESUPUESTO
     }
 
     private final Page page;
@@ -27,47 +31,45 @@ public class NavigateTo implements Task {
     public static NavigateTo dashboard()   { return new NavigateTo(Page.DASHBOARD); }
     public static NavigateTo transaccion() { return new NavigateTo(Page.TRANSACCION); }
     public static NavigateTo historial()   { return new NavigateTo(Page.HISTORIAL); }
-    public static NavigateTo metas()       { return new NavigateTo(Page.METAS); }
-    public static NavigateTo reporte()     { return new NavigateTo(Page.REPORTE); }
+    public static NavigateTo metas()        { return new NavigateTo(Page.METAS); }
+    public static NavigateTo reporte()      { return new NavigateTo(Page.REPORTE); }
+    public static NavigateTo presupuesto()  { return new NavigateTo(Page.PRESUPUESTO); }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
         String baseUrl = System.getProperty("pages.baseUrl", "http://localhost:3000");
+        WebDriver driver = BrowseTheWeb.as(actor).getDriver();
 
         if (page == Page.LOGIN) {
             actor.attemptsTo(Open.url(baseUrl + "/"));
             return;
         }
 
+        String targetPath = switch (page) {
+            case DASHBOARD   -> "/dashboard";
+            case TRANSACCION -> "/dashboard/transaccion";
+            case HISTORIAL   -> "/dashboard/historial";
+            case METAS        -> "/dashboard/metas";
+            case REPORTE      -> "/dashboard/reporte";
+            case PRESUPUESTO  -> "/dashboard/presupuesto";
+            default           -> "/";
+        };
+
         // Cuando ya estamos dentro del dashboard, usamos el sidebar (navegacion client-side).
         // Esto evita el full page reload que dispara el auth guard antes de que React lea localStorage.
-        String currentUrl = BrowseTheWeb.as(actor).getDriver().getCurrentUrl();
+        String currentUrl = driver.getCurrentUrl();
         if (currentUrl != null && currentUrl.contains("/dashboard")) {
-            String href = switch (page) {
-                case DASHBOARD   -> "/dashboard";
-                case TRANSACCION -> "/dashboard/transaccion";
-                case HISTORIAL   -> "/dashboard/historial";
-                case METAS       -> "/dashboard/metas";
-                case REPORTE     -> "/dashboard/reporte";
-                default          -> null;
-            };
-            if (href != null) {
-                actor.attemptsTo(Click.on(
-                    Target.the("sidebar " + page.name().toLowerCase())
-                          .locatedBy("//aside//a[@href='" + href + "']")
-                ));
-                return;
-            }
+            actor.attemptsTo(Click.on(
+                Target.the("sidebar " + page.name().toLowerCase())
+                      .locatedBy("//aside//a[@href='" + targetPath + "']")
+            ));
+        } else {
+            actor.attemptsTo(Open.url(baseUrl + targetPath));
         }
 
-        String url = switch (page) {
-            case DASHBOARD   -> baseUrl + "/dashboard";
-            case TRANSACCION -> baseUrl + "/dashboard/transaccion";
-            case HISTORIAL   -> baseUrl + "/dashboard/historial";
-            case METAS       -> baseUrl + "/dashboard/metas";
-            case REPORTE     -> baseUrl + "/dashboard/reporte";
-            default          -> baseUrl + "/";
-        };
-        actor.attemptsTo(Open.url(url));
+        // Esperar a que la URL cambie a la pagina destino
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .ignoring(Exception.class)
+                .until(d -> d.getCurrentUrl() != null && d.getCurrentUrl().contains(targetPath));
     }
 }

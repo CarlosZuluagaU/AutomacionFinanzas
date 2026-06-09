@@ -14,6 +14,9 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static org.hamcrest.Matchers.is;
 
@@ -34,9 +37,11 @@ public class SavingGoalSteps {
 
     @When("crea una meta llamada {string} con monto objetivo {string}")
     public void creaUnaMetaLlamadaConMontoObjetivo(String nombre, String monto) {
+        String fechaFutura = LocalDate.now().plusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
         SavingGoalModel goal = SavingGoalModel.builder()
                 .nombre(nombre)
                 .montoObjetivo(monto)
+                .fechaLimite(fechaFutura)
                 .build();
         OnStage.theActorInTheSpotlight().attemptsTo(
                 CreateSavingGoal.with(goal),
@@ -57,9 +62,11 @@ public class SavingGoalSteps {
                 Login.withCredentials(TEST_EMAIL, TEST_PASSWORD),
                 NavigateTo.metas()
         );
+        String fechaFutura = LocalDate.now().plusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
         SavingGoalModel goal = SavingGoalModel.builder()
                 .nombre("Meta automatizada")
                 .montoObjetivo("100000")
+                .fechaLimite(fechaFutura)
                 .build();
         OnStage.theActorInTheSpotlight().attemptsTo(
                 CreateSavingGoal.with(goal),

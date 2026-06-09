@@ -18,4 +18,7 @@ public class SidebarPage {
 
     public static final Target NAV_REPORTE =
             Target.the("nav reporte").locatedBy("a[href='/dashboard/reporte']");
+
+    public static final Target NAV_PRESUPUESTO =
+            Target.the("nav presupuesto").locatedBy("a[href='/dashboard/presupuesto']");
 }

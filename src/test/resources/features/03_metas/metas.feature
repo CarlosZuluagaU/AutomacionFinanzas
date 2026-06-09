@@ -7,8 +7,8 @@ Feature: Gestion de metas de ahorro
   Scenario: Crear una nueva meta de ahorro
     Given que el usuario "Carlos" esta autenticado en el sistema
     When navega a la seccion de metas de ahorro
-    And crea una meta llamada "Vacaciones 2026" con monto objetivo "2000000"
-    Then la meta "Vacaciones 2026" deberia aparecer en la lista
+    And crea una meta llamada "Fondo de emergencias" con monto objetivo "5000000"
+    Then la meta "Fondo de emergencias" deberia aparecer en la lista
 
   Scenario: Aportar dinero a una meta existente
     Given que el usuario "Carlos" tiene una meta de ahorro creada
