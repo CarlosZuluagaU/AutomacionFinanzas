@@ -43,6 +43,9 @@ public class CreateTransaction implements Task {
             );
         }
 
-        actor.attemptsTo(Click.on(TransactionPage.SUBMIT_BUTTON));
+        actor.attemptsTo(
+                Click.on(TransactionPage.SUBMIT_BUTTON),
+                co.edu.udea.fabrica.finanzas.utils.WaitTime.of(3000)
+        );
     }
 }

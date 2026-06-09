@@ -7,7 +7,7 @@ import net.serenitybdd.screenplay.actions.Click;
 
 public class DeleteTransaction implements Task {
 
-    private DeleteTransaction() {}
+    public DeleteTransaction() {}
 
     public static DeleteTransaction first() {
         return new DeleteTransaction();

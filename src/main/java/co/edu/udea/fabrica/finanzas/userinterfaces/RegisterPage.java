@@ -20,5 +20,5 @@ public class RegisterPage {
             Target.the("boton crear cuenta").locatedBy("//button[@type='submit']");
 
     public static final Target LOGIN_LINK =
-            Target.the("enlace iniciar sesion").locatedBy("//a[@href='/']");
+            Target.the("boton inicia sesion").locatedBy("//button[contains(.,'Inicia Sesion') and @type='button']");
 }

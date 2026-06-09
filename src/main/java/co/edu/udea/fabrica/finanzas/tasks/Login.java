@@ -6,6 +6,7 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Enter;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -26,13 +27,16 @@ public class Login implements Task {
 
     @Override
     public <T extends Actor> void performAs(T actor) {
+        WebDriver driver = BrowseTheWeb.as(actor).getDriver();
+        try {
+            ((JavascriptExecutor) driver).executeScript("localStorage.clear();");
+        } catch (Exception ignored) {}
         actor.attemptsTo(
                 NavigateTo.login(),
                 Enter.theValue(email).into(LoginPage.EMAIL_INPUT),
                 Enter.theValue(password).into(LoginPage.PASSWORD_INPUT),
                 Click.on(LoginPage.LOGIN_BUTTON)
         );
-        WebDriver driver = BrowseTheWeb.as(actor).getDriver();
         new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(d -> d.getCurrentUrl() != null && d.getCurrentUrl().contains("/dashboard"));
     }

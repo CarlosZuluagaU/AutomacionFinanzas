@@ -2,6 +2,7 @@ package co.edu.udea.fabrica.finanzas.stepdefinitions;
 
 import co.edu.udea.fabrica.finanzas.models.UserModel;
 import co.edu.udea.fabrica.finanzas.questions.IsLoggedIn;
+import co.edu.udea.fabrica.finanzas.tasks.AttemptLogin;
 import co.edu.udea.fabrica.finanzas.tasks.Login;
 import co.edu.udea.fabrica.finanzas.tasks.NavigateTo;
 import co.edu.udea.fabrica.finanzas.tasks.Register;
@@ -46,7 +47,7 @@ public class AuthSteps {
     @When("intenta iniciar sesion con email {string} y contrasena {string}")
     public void intentaIniciarSesionConEmailYContrasena(String email, String password) {
         OnStage.theActorInTheSpotlight().attemptsTo(
-                Login.withCredentials(email, password)
+                AttemptLogin.withCredentials(email, password)
         );
     }
 
@@ -64,9 +65,11 @@ public class AuthSteps {
 
     @When("completa el formulario de registro con nombre {string}, email {string} y contrasena {string}")
     public void completaElFormularioDeRegistro(String nombre, String email, String password) {
+        // Email unico para evitar conflicto 409 en re-ejecuciones (Render DB es persistente)
+        String uniqueEmail = email.replace("@", "+" + System.currentTimeMillis() + "@");
         UserModel user = UserModel.builder()
                 .name(nombre)
-                .email(email)
+                .email(uniqueEmail)
                 .password(password)
                 .build();
         OnStage.theActorInTheSpotlight().attemptsTo(Register.withData(user));

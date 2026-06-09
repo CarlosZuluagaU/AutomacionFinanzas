@@ -5,13 +5,13 @@ import net.serenitybdd.screenplay.targets.Target;
 public class DashboardPage {
 
     public static final Target BALANCE_TOTAL =
-            Target.the("balance total").locatedBy("h2.text-3xl, [data-testid='balance-total']");
+            Target.the("encabezado bienvenida").locatedBy("//h1[contains(@class,'text-3xl')]");
 
     public static final Target TOTAL_INGRESOS =
-            Target.the("total ingresos").locatedBy("[data-testid='total-ingresos'], .text-green-600");
+            Target.the("total ingresos").locatedBy("//p[contains(@class,'text-green-600') and contains(@class,'text-2xl')]");
 
     public static final Target TOTAL_GASTOS =
-            Target.the("total gastos").locatedBy("[data-testid='total-gastos'], .text-red-600");
+            Target.the("total gastos").locatedBy("//p[contains(@class,'text-red-600') and contains(@class,'text-2xl')]");
 
     public static final Target DASHBOARD_TITLE =
             Target.the("titulo dashboard").locatedBy("h1, h2");

@@ -14,7 +14,7 @@ public class LoginPage {
             Target.the("boton iniciar sesion").locatedBy("//button[@type='submit']");
 
     public static final Target REGISTER_LINK =
-            Target.the("enlace registrarse").locatedBy("//a[@href='/register']");
+            Target.the("boton registrate").locatedBy("//button[contains(.,'Registrate') and @type='button']");
 
     public static final Target ERROR_MESSAGE =
             Target.the("mensaje de error").locatedBy("//*[contains(@class,'text-destructive') or contains(@class,'text-red')]");

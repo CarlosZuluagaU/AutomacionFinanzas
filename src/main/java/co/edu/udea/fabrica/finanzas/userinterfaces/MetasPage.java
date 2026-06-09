@@ -20,14 +20,14 @@ public class MetasPage {
             Target.the("tarjetas de metas").locatedBy("//*[@data-testid='goal-card' or contains(@class,'goal-card') or self::article]");
 
     public static final Target APORTE_INPUT =
-            Target.the("campo aporte").locatedBy("//input[contains(@placeholder,'porte') or (@type='number' and contains(@aria-label,'porte'))]");
+            Target.the("campo aporte").locatedBy("//input[@placeholder='Monto a aportar']");
 
     public static final Target APORTE_BUTTON =
-            Target.the("boton aporte").locatedBy("//button[contains(text(),'+') or @aria-label='Agregar aporte']");
+            Target.the("boton aporte").locatedBy("//input[@placeholder='Monto a aportar']/following-sibling::button[1]");
 
     public static final Target PROGRESS_BAR =
-            Target.the("barra de progreso").locatedBy("//*[@role='progressbar' or contains(@class,'progress-bar') or self::progress]");
+            Target.the("barra de progreso").locatedBy("//*[@role='progressbar']");
 
     public static final Target GOAL_NAMES =
-            Target.the("nombres de metas").locatedBy("//h3 | //*[contains(@class,'goal-name') or @data-testid='goal-name']");
+            Target.the("nombres de metas").locatedBy("//div[@data-slot='card-title']");
 }
