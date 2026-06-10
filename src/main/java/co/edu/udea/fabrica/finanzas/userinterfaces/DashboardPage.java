@@ -18,4 +18,7 @@ public class DashboardPage {
 
     public static final Target LOGOUT_BUTTON =
             Target.the("boton cerrar sesion").locatedBy("button[aria-label='Cerrar sesion'], button:contains('Salir')");
+
+    public static final Target REPORTE_TITLE =
+            Target.the("titulo reporte mensual").locatedBy("//div[@data-slot='card-title' and contains(text(),'Reporte Mensual')]");
 }

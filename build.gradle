@@ -56,4 +56,6 @@ task aggregate {
 test {
     testLogging.showStandardStreams = true
     finalizedBy aggregate
+    outputs.upToDateWhen { false }
+    doNotTrackState("browser tests must always run against the live app")
 }

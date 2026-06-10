@@ -30,4 +30,7 @@ public class MetasPage {
 
     public static final Target GOAL_NAMES =
             Target.the("nombres de metas").locatedBy("//div[@data-slot='card-title']");
+
+    public static final Target META_CREADA_OK =
+            Target.the("confirmacion meta creada").locatedBy("//*[contains(text(),'Meta creada exitosamente')]");
 }

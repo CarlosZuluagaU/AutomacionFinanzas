@@ -46,18 +46,28 @@ public class CreateSavingGoal implements Task {
                 Enter.theValue(goal.getMontoObjetivo()).into(MetasPage.MONTO_OBJETIVO_INPUT)
         );
 
-        // Siempre setear la fecha via JS para evitar el date-picker nativo de Chrome
+        // React controla el input con value={state}, por lo que el.value = x no actualiza
+        // el estado interno. Hay que usar el setter nativo del prototipo para que React
+        // procese el cambio como si viniera del usuario.
         String fechaValue = (goal.getFechaLimite() != null && !goal.getFechaLimite().isEmpty())
                 ? goal.getFechaLimite() : "";
         ((JavascriptExecutor) driver).executeScript(
                 "var el = document.getElementById('deadline');" +
-                "if(el){ el.value='" + fechaValue + "';" +
-                "el.dispatchEvent(new Event('input',{bubbles:true}));" +
-                "el.dispatchEvent(new Event('change',{bubbles:true})); }");
+                "if(el){" +
+                "  var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;" +
+                "  setter.call(el,'" + fechaValue + "');" +
+                "  el.dispatchEvent(new Event('input',{bubbles:true}));" +
+                "  el.dispatchEvent(new Event('change',{bubbles:true}));" +
+                "}");
 
         actor.attemptsTo(Click.on(MetasPage.CREAR_META_BUTTON));
 
-        // Esperar a que el backend procese la creacion
-        actor.attemptsTo(WaitTime.of(3000));
+        // Esperar confirmacion visible del frontend antes de continuar
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .ignoring(Exception.class)
+                .until(d -> !MetasPage.META_CREADA_OK.resolveAllFor(actor).isEmpty());
+
+        // Dar tiempo al refreshKey de React para que la lista se recargue
+        actor.attemptsTo(WaitTime.of(2000));
     }
 }

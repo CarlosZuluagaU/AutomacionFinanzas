@@ -25,6 +25,9 @@ public class SavingGoalSteps {
     private static final String TEST_EMAIL    = "test@finanzas.com";
     private static final String TEST_PASSWORD = "Test1234!";
 
+    // Se genera en el When y se reutiliza en el Then para que coincidan
+    private String nombreMetaGenerado;
+
     @Before
     public void setUp() {
         OnStage.setTheStage(new OnlineCast());
@@ -38,21 +41,22 @@ public class SavingGoalSteps {
     @When("crea una meta llamada {string} con monto objetivo {string}")
     public void creaUnaMetaLlamadaConMontoObjetivo(String nombre, String monto) {
         String fechaFutura = LocalDate.now().plusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+        nombreMetaGenerado = nombre + "_" + System.currentTimeMillis();
         SavingGoalModel goal = SavingGoalModel.builder()
-                .nombre(nombre)
+                .nombre(nombreMetaGenerado)
                 .montoObjetivo(monto)
                 .fechaLimite(fechaFutura)
                 .build();
         OnStage.theActorInTheSpotlight().attemptsTo(
-                CreateSavingGoal.with(goal),
-                WaitTime.of(1500)
+                CreateSavingGoal.with(goal)
         );
     }
 
     @Then("la meta {string} deberia aparecer en la lista")
     public void laMetaDeberiaAparecerEnLaLista(String nombre) {
+        String nameToCheck = (nombreMetaGenerado != null) ? nombreMetaGenerado : nombre;
         OnStage.theActorInTheSpotlight().should(
-                seeThat(GoalExists.withName(nombre), is(true))
+                seeThat(GoalExists.withName(nameToCheck), is(true))
         );
     }
 
@@ -64,13 +68,12 @@ public class SavingGoalSteps {
         );
         String fechaFutura = LocalDate.now().plusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
         SavingGoalModel goal = SavingGoalModel.builder()
-                .nombre("Meta automatizada")
+                .nombre("Meta automatizada_" + System.currentTimeMillis())
                 .montoObjetivo("100000")
                 .fechaLimite(fechaFutura)
                 .build();
         OnStage.theActorInTheSpotlight().attemptsTo(
-                CreateSavingGoal.with(goal),
-                WaitTime.of(1500)
+                CreateSavingGoal.with(goal)
         );
     }
 
